@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/fish/Neon.tscn" type="PackedScene" id=1]
+
+[node name="Tank" type="StaticBody2D"]
+collision_mask = 2
+
+[node name="Walls" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( 2, -1, 2, 358, 638, 358, 638, -1, 642, -1, 642, 362, -2, 362, -2, -1 )
+
+[node name="Fish" type="YSort" parent="."]
+
+[node name="Neon" parent="Fish" instance=ExtResource( 1 )]
+position = Vector2( 193, 112 )
