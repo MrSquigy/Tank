@@ -56,12 +56,14 @@ func fall_state(delta: float) -> void:
 	velocity.y += GRAVITY * delta
 	velocity = move_and_slide(velocity)
 	
-	if position.y - 15 >= 0:
-		state = WANDER
+	if position.y - sprite.get_rect().size.y / 2 >= 0:
 		moving = false
+		state = WANDER
+		set_move_timer()
 
 func jump() -> void:
 	state = FALL
+	moveTimer.stop()
 
 func bounce(from: Vector2) -> void:
 	if from.y == 358:
@@ -79,7 +81,23 @@ func set_move_timer() -> void:
 func _on_MoveTimer_timeout() -> void:
 	moveTimer.stop()
 	orignal_position = position
-	direction = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized()
+	
+	var leeway: int = 20
+	var length: float = sprite.get_rect().size.x / 2
+	var height: float = sprite.get_rect().size.y / 2
+	var mins: Array = [-1, 1, -1, 1]
+	
+	# If near tank edges, move away
+	if position.x - 2 <= leeway + length: # Left side
+		mins[0] = 0 # x = 0..1
+	elif position.x - 638 >= -(leeway + length): # Right side
+		mins[1] = 0 # x = -1..0
+	if position.y - 358 >= -(leeway + height): # Bottom
+		mins[3] = 0 # y = -1..0
+#	elif position.y <= leeway + height: # Top
+#		mins[2] = 0 # y = 0..1
+	
+	direction = Vector2(rand_range(mins[0], mins[1]), rand_range(mins[2], mins[3])).normalized()
 	sprite.flip_h = direction.x < 0
 	distance = rand_range(min_move_distance, max_move_distance)
 	moving = true
