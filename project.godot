@@ -59,4 +59,5 @@ texture={
 
 [rendering]
 
+environment/default_clear_color=Color( 0.14902, 0.45098, 0.552941, 1 )
 environment/default_environment="res://default_env.tres"
