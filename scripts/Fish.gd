@@ -3,7 +3,7 @@ extends KinematicBody2D
 const MAX_SPEED = 50
 const ACCELERATION = 50
 const RESISTANCE = 25
-const GRAVITY = 50
+const GRAVITY = 25
 
 enum {
 	WANDER,
@@ -48,6 +48,9 @@ func wander_state(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, RESISTANCE * delta)
 	
 	velocity = move_and_slide(velocity)
+	
+	if get_slide_count() >= 1:
+		bounce(get_slide_collision(0).position)
 
 func fall_state(delta: float) -> void:
 	velocity.y += GRAVITY * delta
@@ -60,8 +63,15 @@ func fall_state(delta: float) -> void:
 func jump() -> void:
 	state = FALL
 
-func check_bounds() -> bool:
-	return true
+func bounce(from: Vector2) -> void:
+	if from.y == 358:
+		velocity = RESISTANCE * Vector2(direction.x, direction.y * -1)
+	else:
+		velocity = RESISTANCE * Vector2(direction.x * -1, direction.y)
+	
+	if state != FALL:
+		moving = false
+		set_move_timer()
 
 func set_move_timer() -> void:
 	moveTimer.start(rand_range(min_move_time, max_move_time))
