@@ -56,10 +56,8 @@ func fall_state(delta: float) -> void:
 	if position.y - 15 >= 0:
 		state = WANDER
 		moving = false
-		moveTimer.paused = false
 
 func jump() -> void:
-	moveTimer.paused = true
 	state = FALL
 
 func check_bounds() -> bool:
